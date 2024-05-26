@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login</title>
+	<link rel="stylesheet" href="index.css">
+	<link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+	<style>
+		.swal2-actions {
+			display: flex;
+			justify-content: center;
+		}
+	</style>
+	<nav class="navbar">
+		<div class="navbar-container">
+			<input type="checkbox" name="" id="checkbox">
+			<div class="hamburger-lines">
+				<span class="line line1"></span>
+				<span class="line line2"></span>
+				<span class="line line3"></span>
+			</div>
+			<ul class="menu-items">
+				<li><a href="index.html">Home</a></li>
+				<li><a href="index.html#sellers">Shop</a></li>
+				<li><a href="index.html#contact">Contact</a></li>
+        <li><a href="index.html">Log in</a></li>
+			</ul>
+			<div class="logo">
+				<img src="logo.png" alt="logo">
+			</div>
+		</div>
+	</nav>
+</head>
+<body>
+	<div class="main">  	
+		<input type="checkbox" id="chk" aria-hidden="true">
+		<div class="signup">
+			<form id="signupForm">
+				<label for="chk" aria-hidden="true">Sign up</label>
+				<input type="email" name="email" placeholder="Email" required="">
+				<input type="password" name="pswd" placeholder="Password" required="">
+				<button type="submit">Sign up</button>
+			</form>
+		</div>
+
+		<div class="login">
+			<form id="loginForm">
+				<label for="chk" aria-hidden="true">Login</label>
+				<input type="email" name="email" placeholder="Email" required="">
+				<input type="password" name="pswd" placeholder="Password" required="">
+				<button type="submit">Login</button>
+			</form>
+		</div>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script type="module">
+		//Update the below URL with the appropriate version if necessary.
+		import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+		import {
+		  getAuth,
+		  createUserWithEmailAndPassword,
+		  signInWithEmailAndPassword,
+		  onAuthStateChanged,
+		  signOut,
+		  //Update the below URL with the appropriate version if necessary.
+		} from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
+
+		// INSERT YOUR FIREBASE CONFIG OBJECT HERE
+		const firebaseConfig = {
+			apiKey: "AIzaSyAQAPDN6ax-qKKDCb-Id9Oxysqykbo9UzM",
+        	authDomain: "auth-f4374.firebaseapp.com",
+        	projectId: "auth-f4374",
+        	storageBucket: "auth-f4374.appspot.com",
+        	messagingSenderId: "995698274609",
+        	appId: "1:995698274609:web:aacdb1b37a7eb3f01ec010",
+		};
+		
+		// Initialize Firebase
+		const app = initializeApp(firebaseConfig);
+     	const auth = getAuth(app);
+
+		// Get references to the signup and login forms
+		const signupForm = document.getElementById("signupForm");
+		const loginForm = document.getElementById("loginForm");
+
+		// Signup form submit event listener
+		signupForm.addEventListener("submit", (event) => {
+			event.preventDefault();
+
+			const email = signupForm.elements.email.value;
+			const password = signupForm.elements.pswd.value;
+
+			// Create user with email and password
+			createUserWithEmailAndPassword(auth, email, password)
+				.then((userCredential) => {
+					const user = userCredential.user;
+					Swal.fire("Your account is successfully created!");
+				})
+				.catch((error) => {
+					const errorCode = error.code;
+					const errorMessage = error.message;
+					console.log(errorCode, errorMessage);
+					Swal.fire("Error creating account. Please try again.");
+				});
+		});
+
+		// Login form submit event listener
+		loginForm.addEventListener("submit", (event) => {
+			event.preventDefault();
+
+			const email = loginForm.elements.email.value;
+			const password = loginForm.elements.pswd.value;
+
+			// Sign in user with email and password
+			signInWithEmailAndPassword(auth, email, password)
+				.then((userCredential) => {
+					const user = userCredential.user;
+					Swal.fire("You have successfully logged in!");
+
+					// Redirect to home.html
+					window.location.href = "home.html";
+				})
+				.catch((error) => {
+					const errorCode = error.code;
+					const errorMessage = error.message;
+					console.log(errorCode, errorMessage);
+					Swal.fire("Invalid email or password. Please try again.");
+				});
+		});
+	</script>
+</body>
+</html>
